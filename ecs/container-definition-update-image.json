@@ -1,0 +1,63 @@
+[
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ch-dev-log-group",
+          "awslogs-region": "eu-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "containerPort": 8080
+        },
+        {
+          "hostPort": 8081,
+          "protocol": "tcp",
+          "containerPort": 8081
+        }
+      ],
+      "cpu": 256,
+      "environment": [
+        {
+          "name": "MANAGEMENT_SERVER_PORT",
+          "value": "8081"
+        },
+        {
+          "name": "SERVER_PORT",
+          "value": "8080"
+        }
+      ],
+      "secrets": [
+        {
+          "valueFrom": "ch-dev-user-db-url",
+          "name": "SPRING_DATASOURCE_URL"
+        },
+        {
+          "valueFrom": "ch-dev-user-db-username",
+          "name": "SPRING_DATASOURCE_USERNAME"
+        },
+        {
+          "valueFrom": "ch-dev-user-db-password",
+          "name": "SPRING_DATASOURCE_PASSWORD"
+        }
+      ],
+      "memory": 512,
+      "image": "",
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8081/actuator/health || exit 1"
+        ],
+        "timeout": 5,
+        "interval": 30,
+        "startPeriod": 60
+      },
+      "essential": true,
+      "name": "userApi"
+    }
+]

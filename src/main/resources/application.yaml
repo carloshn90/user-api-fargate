@@ -1,0 +1,50 @@
+spring:
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 1.0.0.0
+    enabled: true
+    locations: classpath:db/migration/mysql
+    create-schemas: true
+    schemas: fargate
+    validate-on-migrate: true
+  jackson:
+    default-property-inclusion: always
+    deserialization:
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
+      FAIL_ON_IGNORED_PROPERTIES: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    mapper:
+      DEFAULT_VIEW_INCLUSION: true
+    serialization:
+     INDENT_OUTPUT: true
+     WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/fargate
+    username: root
+    password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: true
+    properties:
+      hibernate:
+        default_schema: fargate
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: none
+              create-target: ./target/V1.0.0.0__create_user_table.sql
+server:
+  servlet:
+    context-path: /
+  port: 8081
+
+management:
+  server:
+    port: 8082
+
